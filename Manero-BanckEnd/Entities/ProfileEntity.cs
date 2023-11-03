@@ -2,9 +2,9 @@
 
 public class ProfileEntity
 {
-    public int Id { get; set; } 
-    public int UserId { get; set; }
-    public UserEntity User { get; set; }
+    public int Id { get; set; }
+    public string UserId { get; set; } = null!;
+    public UserEntity User { get; set; } = null!;
 
     public string ImageUrl { get; set; } = null!;
 
