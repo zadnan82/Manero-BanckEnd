@@ -6,16 +6,16 @@ public class OrderEntity
 
     public int Id { get; set; }
 
-    public int UserId { get; set; } 
+    public string  UserId { get; set; } = null!;
 
-    public UserEntity User { get; set; }    
+    public UserEntity User { get; set; } = null!;
 
-    public int PromoCodeId { get; set; }
-    public PromoCodeEntity  PromoCode { get; set; }
+    public int PromoCodeId { get; set; }  
+    public PromoCodeEntity  PromoCode { get; set; } = null!;
 
     public int AddressId { get; set; }
 
-    public AddressEntity Address { get; set; }
+    public AddressEntity Address { get; set; } = null!;
 
     public string PaymentMethod { get; set; } = null!;
 

@@ -3,12 +3,12 @@
     public class FavoritesEntity
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public string  UserId { get; set; } = null!;
 
-        public UserEntity UserEntity { get; set; }
-        public int ProductId { get; set; }   
-        
-        public ProductEntity Product { get; set; }
+        public UserEntity UserEntity { get; set; } = null!;
+        public string ArticleNumberId { get; set; } = null!;
+
+        public ProductEntity Product { get; set; } = null!;
 
 
     }

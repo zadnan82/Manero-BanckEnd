@@ -4,9 +4,9 @@
     {
         public int Id { get; set; }
 
-        public int UserId { get; set; }
+        public string  UserId { get; set; } = null!;
 
-        public UserEntity User { get; set; }
+        public UserEntity User { get; set; } = null!;
         public string CardHolderName { get; set; } = null!;
         public int CardNumber { get; set; }
         public DateTime ExpirationDate { get; set; }
