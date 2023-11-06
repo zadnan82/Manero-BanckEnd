@@ -27,16 +27,22 @@ namespace Manero_BanckEnd.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ArticleNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Size = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "money", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    ProductType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.PrimaryKey("PK_Products", x => x.ArticleNumber);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,8 +64,7 @@ namespace Manero_BanckEnd.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -72,38 +77,12 @@ namespace Manero_BanckEnd.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Size = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    ProductType = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Products_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AddressTypes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AddressId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -125,12 +104,32 @@ namespace Manero_BanckEnd.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ApiKeys",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Key = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApiKeys", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApiKeys_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Cards",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CardHolderName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CardNumber = table.Column<int>(type: "int", nullable: false),
                     ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -148,12 +147,39 @@ namespace Manero_BanckEnd.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Favorites",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserEntityId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ArticleNumberId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductArticleNumber = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Favorites", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Favorites_Products_ProductArticleNumber",
+                        column: x => x.ProductArticleNumber,
+                        principalTable: "Products",
+                        principalColumn: "ArticleNumber",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Favorites_Users_UserEntityId",
+                        column: x => x.UserEntityId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PromoCodeId = table.Column<int>(type: "int", nullable: false),
                     AddressId = table.Column<int>(type: "int", nullable: false),
                     PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -191,7 +217,7 @@ namespace Manero_BanckEnd.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -208,40 +234,14 @@ namespace Manero_BanckEnd.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Favorites",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    UserEntityId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Favorites", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Favorites_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Favorites_Users_UserEntityId",
-                        column: x => x.UserEntityId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Reviews",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ArticleNumberId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductArticleNumber = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -250,11 +250,10 @@ namespace Manero_BanckEnd.Migrations
                 {
                     table.PrimaryKey("PK_Reviews", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reviews_Products_ProductId",
-                        column: x => x.ProductId,
+                        name: "FK_Reviews_Products_ProductArticleNumber",
+                        column: x => x.ProductArticleNumber,
                         principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ArticleNumber");
                     table.ForeignKey(
                         name: "FK_Reviews_Users_UserId",
                         column: x => x.UserId,
@@ -270,7 +269,8 @@ namespace Manero_BanckEnd.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OrderId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    ArticleNumberId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductArticleNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     OldPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     NewPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false)
@@ -285,10 +285,10 @@ namespace Manero_BanckEnd.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderItems_Products_ProductId",
-                        column: x => x.ProductId,
+                        name: "FK_OrderItems_Products_ProductArticleNumber",
+                        column: x => x.ProductArticleNumber,
                         principalTable: "Products",
-                        principalColumn: "Id",
+                        principalColumn: "ArticleNumber",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -303,14 +303,19 @@ namespace Manero_BanckEnd.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ApiKeys_UserId",
+                table: "ApiKeys",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Cards_UserId",
                 table: "Cards",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Favorites_ProductId",
+                name: "IX_Favorites_ProductArticleNumber",
                 table: "Favorites",
-                column: "ProductId");
+                column: "ProductArticleNumber");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Favorites_UserEntityId",
@@ -323,9 +328,9 @@ namespace Manero_BanckEnd.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_ProductId",
+                name: "IX_OrderItems_ProductArticleNumber",
                 table: "OrderItems",
-                column: "ProductId");
+                column: "ProductArticleNumber");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_AddressId",
@@ -343,19 +348,14 @@ namespace Manero_BanckEnd.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_CategoryId",
-                table: "Products",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Profiles_UserId",
                 table: "Profiles",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reviews_ProductId",
+                name: "IX_Reviews_ProductArticleNumber",
                 table: "Reviews",
-                column: "ProductId");
+                column: "ProductArticleNumber");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_UserId",
@@ -368,6 +368,9 @@ namespace Manero_BanckEnd.Migrations
         {
             migrationBuilder.DropTable(
                 name: "AddressTypes");
+
+            migrationBuilder.DropTable(
+                name: "ApiKeys");
 
             migrationBuilder.DropTable(
                 name: "Cards");
@@ -398,9 +401,6 @@ namespace Manero_BanckEnd.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Categories");
         }
     }
 }
