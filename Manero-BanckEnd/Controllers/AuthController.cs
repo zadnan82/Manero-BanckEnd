@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -42,13 +43,17 @@ namespace Manero_BanckEnd.Controllers
                     return BadRequest("Fill in Email and Password");
                 }
 
-
+                 
+                
                 var result = await _userService.LoginUserAsync(user);
+
+                
                 return result.Status switch
                 {
                     ResponseStatusCode.OK => Ok(new ResponseWithToken
                     {
-                        Token = _tokenGenerator.Generate()
+                        Token = _tokenGenerator.Generate(), 
+                        Result = result
                     }),
                     ResponseStatusCode.UNAUTHORIZED => Unauthorized(result.Message),
                     _ => Problem(result.Message),
@@ -73,7 +78,11 @@ namespace Manero_BanckEnd.Controllers
                 var result = await _userService.CreateUserAsync(request);
                 return result.Status switch
                 {
-                    ResponseStatusCode.CREATED => Created("", result.Result),
+                    ResponseStatusCode.CREATED => Created("", new ResponseWithToken
+                {
+                    Token = _tokenGenerator.Generate(),
+                    Result = result
+                }),
                     ResponseStatusCode.EXIST => Conflict( result.Message),
                     _ => Problem(result.Message),
                 };

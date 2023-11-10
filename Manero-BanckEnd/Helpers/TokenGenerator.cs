@@ -5,15 +5,15 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Manero_BanckEnd
+namespace Manero_BanckEnd.Helpers
 {
     public class TokenGenerator
     {
-         
-            private readonly IConfiguration _configuration;
+
+        private readonly IConfiguration _configuration;
 
         public TokenGenerator(IConfiguration configuration)
-        { 
+        {
             _configuration = configuration;
         }
 
@@ -21,7 +21,7 @@ namespace Manero_BanckEnd
         public string Generate()
         {
 
-          
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]!));
             var signingKey = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
@@ -38,8 +38,8 @@ namespace Manero_BanckEnd
             return token;
         }
 
-        public string Generate(Claim[] claims )
-        { 
+        public string Generate(Claim[] claims)
+        {
 
             //var claims = new Claim[]
             //    {
