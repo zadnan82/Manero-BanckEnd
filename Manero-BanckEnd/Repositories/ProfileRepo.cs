@@ -3,11 +3,11 @@ using Manero_BanckEnd.Entities;
 
 namespace Manero_BanckEnd.Repositories
 {
-    public class UserRepo : Repo<UserEntity>
+    public class ProfileRepo : Repo<ProfileEntity>
     {
-        public UserRepo(DataContext context) : base(context)
+        public ProfileRepo(DataContext context) : base(context)
         {
         }
-        
+
     }
 }
