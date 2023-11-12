@@ -25,10 +25,7 @@ public class UserTests
               Email = "zainab@hotmail.com",
                Password = "Bytmig123!",
         };
-
-
-
-
+     
 
     [Fact]
     public void UserCreateRequest_Should_Convert_ToUserEntity()
