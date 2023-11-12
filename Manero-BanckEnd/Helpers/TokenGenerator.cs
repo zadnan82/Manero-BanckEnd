@@ -30,7 +30,7 @@ namespace Manero_BanckEnd.Helpers
                 (
                     _configuration["Token:Issuer"],
                     _configuration["Token:Audience"],
-                    expires: DateTime.Now.AddMinutes(5),
+                    expires: DateTime.Now.AddMinutes(30),
                     signingCredentials: signingKey
                 );
 
@@ -40,27 +40,21 @@ namespace Manero_BanckEnd.Helpers
 
         public string Generate(Claim[] claims)
         {
-
-            //var claims = new Claim[]
-            //    {
-            //            new Claim(ClaimTypes.Email, user.Email),
-            //            new Claim(ClaimTypes.Name, user.Email),
-            //            new Claim("ApiKey", _configuration["ApiKeys:User"]!)
-            //    };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]!));
             var signingKey = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
             var securityToken = new JwtSecurityToken
-                (
-                    _configuration["Token:Issuer"],
-                    _configuration["Token:Audience"],
-                    claims,
-                    expires: DateTime.Now.AddMinutes(5),
-                    signingCredentials: signingKey
-                );
+            (
+                _configuration["Token:Issuer"],
+                _configuration["Token:Audience"],
+                claims,
+                expires: DateTime.Now.AddMinutes(30), // Default expiration time is 30 minutes
+                signingCredentials: signingKey
+            );
 
             var token = new JwtSecurityTokenHandler().WriteToken(securityToken);
             return token;
         }
     }
 }
+

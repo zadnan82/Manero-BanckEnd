@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Manero_BanckEnd.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231103205118_Init")]
+    [Migration("20231112171006_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -288,22 +288,16 @@ namespace Manero_BanckEnd.Migrations
 
             modelBuilder.Entity("Manero_BanckEnd.Entities.ProfileEntity", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")

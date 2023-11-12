@@ -15,10 +15,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddTransient<TokenGenerator>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(x=>
+    .AddJwtBearer(options =>
     {
-        x.TokenValidationParameters = new TokenValidationParameters
+        options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidateAudience = true,
@@ -30,27 +31,53 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ClockSkew = TimeSpan.Zero
         };
     });
-builder.Services.AddSwaggerGen(sw =>
+
+builder.Services.AddSwaggerGen(swagger =>
 {
-    sw.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    swagger.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "Manero API",
-        Description = @"API for Manero",
+        Description = "API for Manero",
         Contact = new OpenApiContact
         {
             Name = "Group 3",
-
         },
     });
 
+    swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer"
+    });
+
+    swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
 });
+
 builder.Services.AddAuthorization();
 
+
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
+ 
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<ProfileService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProductRepo>();
-builder.Services.AddScoped<UserRepo>(); 
+builder.Services.AddScoped<UserRepo>();
+builder.Services.AddScoped<ProfileRepo>();
 builder.Services.AddScoped<ApiKeyRepo>();
 builder.Services.AddScoped<UseApiKeyAttribute>();
 
@@ -61,7 +88,8 @@ app.UseCors(x=> x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
+
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
+app.MapControllers(); 
 app.Run();
