@@ -80,6 +80,8 @@ builder.Services.AddScoped<UserRepo>();
 builder.Services.AddScoped<ProfileRepo>();
 builder.Services.AddScoped<ApiKeyRepo>();
 builder.Services.AddScoped<UseApiKeyAttribute>();
+builder.Services.AddScoped<CardService>();
+builder.Services.AddScoped<CardRepo>();
 
 
 var app = builder.Build();
