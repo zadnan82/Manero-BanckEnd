@@ -1,5 +1,6 @@
 ﻿using Manero_BanckEnd.Contexts;
 using Manero_BanckEnd.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Manero_BanckEnd.Repositories;
 

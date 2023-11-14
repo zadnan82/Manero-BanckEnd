@@ -1,5 +1,6 @@
 ﻿using Manero_BanckEnd.Entities;
 using Manero_BanckEnd.Helpers;
+using Manero_BanckEnd.Models;
 using Manero_BanckEnd.Repositories;
 
 namespace Manero_BanckEnd.Services;
