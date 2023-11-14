@@ -25,9 +25,12 @@ public class ProductEntity
     public string Description { get; set; } = null!;
     public int Quantity { get; set; }
 
+    //public string ImageUrl { get; set; } = null!;
+
     //public DateTime Created {  get; set; } = DateTime.Now;
     //public DateTime Updated { get; set; } = DateTime.Now;
     public ProductType ProductType { get; set; }
+    public bool IsFeatured { get; set; }
 
 
     public static implicit operator ProductEntity(ProductCreateRequest request )
@@ -45,6 +48,9 @@ public class ProductEntity
                 Size = request.Size,
                 Color = request.Color,
                 Quantity = request.Quantity,
+                IsFeatured = request.IsFeatured,
+                //ImageUrl = request.ImageUrl,
+
                   
 
             };

@@ -13,7 +13,9 @@ namespace Manero_BanckEnd.Schemas
         public decimal Price { get; set; }
         public string Description { get; set; } = null!;
         public int Quantity { get; set; }
+        //public string ImageUrl { get; set; } = null!;
         public ProductType ProductType { get; set; }
+        public bool IsFeatured { get; set; }
 
     }
 }

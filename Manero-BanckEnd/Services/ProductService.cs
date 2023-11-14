@@ -1,7 +1,9 @@
-﻿using Manero_BanckEnd.Helpers;
+﻿using Manero_BanckEnd.Entities;
+using Manero_BanckEnd.Helpers;
 using Manero_BanckEnd.Models;
 using Manero_BanckEnd.Repositories;
 using Manero_BanckEnd.Schemas;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace Manero_BanckEnd.Services;
@@ -70,10 +72,35 @@ public class ProductService
         return new ServiceResponse
         {
             Status = ResponseStatusCode.ERROR,
-            Message = "Someting went wrong",
+            Message = "Something went wrong",
             Result = null
         };
 
     }
 
+    public async Task <ServiceResponse> GetFeaturedProducts(string category)
+    {
+        try
+        {
+            // Get the products from the database that match the category and are featured
+            var featuredProducts = (await _productRepo.GetAsync()).Select(p => p.Category == category ).ToList();
+
+            
+            var response = new ServiceResponse
+            {
+                Status = ResponseStatusCode.OK,
+                Result = featuredProducts,
+                Message = "Featured products retrieved successfully",
+            };
+
+            return response;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message) ; }
+        return new ServiceResponse
+        {
+            Status = ResponseStatusCode.ERROR,
+            Message = "Something wrong geting featured products",
+            Result = null
+        };
+    }
 }
