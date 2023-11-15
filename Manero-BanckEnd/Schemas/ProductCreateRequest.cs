@@ -15,6 +15,7 @@ namespace Manero_BanckEnd.Schemas
         public int Quantity { get; set; }
         public ProductType ProductType { get; set; }
         public bool IsFeatured { get; set; }
+        public string ImageLink { get; set; }
 
     }
 }

@@ -20,6 +20,7 @@ namespace Manero_BanckEnd.Schemas
         //public DateTime Updated { get; set; } = DateTime.Now;
         public ProductType ProductType { get; set; }
         public bool IsFeatured { get; set; }
+        public string ImageLink { get; set; }
 
 
     }

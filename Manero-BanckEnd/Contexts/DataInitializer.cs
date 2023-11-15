@@ -36,7 +36,9 @@ namespace Manero_BanckEnd.Contexts
                     Description = "A comfortable T-shirt made of organic cotton.",
                     Quantity = 100,
                     ProductType = ProductType.Shirts,
-                    IsFeatured = false
+                    IsFeatured = false,
+                    ImageLink = "https://cdn.pixabay.com/photo/2016/03/25/09/04/t-shirt-1278404_1280.jpg"
+
                 });
             }
             if (!_dbContext.Products
@@ -53,7 +55,8 @@ namespace Manero_BanckEnd.Contexts
                     Description = "Classic denim jeans.",
                     Quantity = 50,
                     ProductType = ProductType.Pants,
-                    IsFeatured = true
+                    IsFeatured = true,
+                    ImageLink = "https://cdn.pixabay.com/photo/2018/10/10/14/25/pants-3737416_1280.jpg"
                 });
             }
             if (!_dbContext.Products
@@ -70,7 +73,8 @@ namespace Manero_BanckEnd.Contexts
                     Description = "A formal dress shirt.",
                     Quantity = 75,
                     ProductType = ProductType.Shirts,
-                    IsFeatured = false
+                    IsFeatured = false,
+                    ImageLink = "https://cdn.pixabay.com/photo/2017/06/20/22/57/women-2425268_1280.jpg"
                 });
             }
             
