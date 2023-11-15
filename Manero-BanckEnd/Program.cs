@@ -82,9 +82,15 @@ builder.Services.AddScoped<ApiKeyRepo>();
 builder.Services.AddScoped<UseApiKeyAttribute>();
 builder.Services.AddScoped<CardService>();
 builder.Services.AddScoped<CardRepo>();
-
+builder.Services.AddTransient<DataInitializer>();
+builder.Services.AddScoped<DataInitializer>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    scope.ServiceProvider.GetService<DataInitializer>().MigrateData();
+}
 
 app.UseCors(x=> x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
 app.UseSwagger();

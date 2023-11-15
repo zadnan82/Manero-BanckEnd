@@ -28,6 +28,7 @@ public class ProductEntity
     //public DateTime Created {  get; set; } = DateTime.Now;
     //public DateTime Updated { get; set; } = DateTime.Now;
     public ProductType ProductType { get; set; }
+    public bool IsFeatured { get; set; }
 
 
     public static implicit operator ProductEntity(ProductCreateRequest request )
@@ -45,6 +46,7 @@ public class ProductEntity
                 Size = request.Size,
                 Color = request.Color,
                 Quantity = request.Quantity,
+                IsFeatured = request.IsFeatured,
                   
 
             };

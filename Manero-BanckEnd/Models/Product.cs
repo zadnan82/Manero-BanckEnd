@@ -21,6 +21,7 @@ namespace Manero_BanckEnd.Models
         //public DateTime Created {  get; set; } = DateTime.Now;
         //public DateTime Updated { get; set; } = DateTime.Now;
         public ProductType ProductType { get; set; }
+        public bool IsFeatured { get; set; }
 
         public static implicit operator Product(ProductEntity entity)
         {
@@ -36,7 +37,8 @@ namespace Manero_BanckEnd.Models
                     Size = entity.Size,
                     Color = entity.Color,
                     Quantity = entity.Quantity, 
-                    Category = entity.Category
+                    Category = entity.Category,
+                    IsFeatured = entity.IsFeatured,
                       
                 };
             }

@@ -57,5 +57,19 @@ namespace Manero_BanckEnd.Controllers
             catch (Exception ex) { Debug.WriteLine(ex.Message); }
             return Problem();
         }
+
+        [HttpGet("featured")]
+        public async Task<IActionResult> GetFeaturedProducts(string category)
+        {
+            try
+            {
+                var featuredProducts = await _productService.GetFeaturedProducts(category);
+                return Ok(featuredProducts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
