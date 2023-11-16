@@ -2,12 +2,16 @@ using Manero_BanckEnd.Contexts;
 using Manero_BanckEnd.Helpers;
 using Manero_BanckEnd.Repositories;
 using Manero_BanckEnd.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -84,6 +88,70 @@ builder.Services.AddScoped<CardService>();
 builder.Services.AddScoped<CardRepo>();
 builder.Services.AddTransient<DataInitializer>();
 builder.Services.AddScoped<DataInitializer>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<DataContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+})
+    .AddCookie()
+    .AddOAuth("Google", options =>
+    {
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+        options.CallbackPath = new PathString("/signin-google");
+
+        options.AuthorizationEndpoint = "https://accounts.google.com/o/oauth2/auth";
+        options.TokenEndpoint = "https://accounts.google.com/o/oauth2/token";
+
+        options.Scope.Add("openid");
+        options.Scope.Add("profile");
+        options.Scope.Add("email");
+
+        options.SaveTokens = true;
+        options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+        options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+        options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+
+        options.Events = new OAuthEvents();
+    })
+    .AddOAuth("Facebook", options =>
+    {
+        options.ClientId = builder.Configuration["Authentication:Facebook:AppId"]!;
+        options.ClientSecret = builder.Configuration["Authentication:Facebook:AppSecret"]!;
+        options.CallbackPath = new PathString("/signin-facebook");
+
+        options.AuthorizationEndpoint = "https://www.facebook.com/v12.0/dialog/oauth";
+        options.TokenEndpoint = "https://graph.facebook.com/v12.0/oauth/access_token";
+        options.UserInformationEndpoint = "https://graph.facebook.com/v12.0/me";
+
+        options.Scope.Add("email");
+        options.Scope.Add("public_profile");
+
+        options.SaveTokens = true;
+        options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+        options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+        options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+
+        options.Events = new OAuthEvents();
+    })
+    .AddOAuth("Twitter", options =>
+    {
+        options.ClientId = builder.Configuration["Authentication:Twitter:ConsumerKey"]!;
+        options.ClientSecret = builder.Configuration["Authentication:Twitter:ConsumerSecret"]!;
+        options.CallbackPath = new PathString("/signin-twitter");
+
+        options.AuthorizationEndpoint = "https://api.twitter.com/oauth/authenticate";
+        options.TokenEndpoint = "https://api.twitter.com/oauth/access_token";
+        options.UserInformationEndpoint = "https://api.twitter.com/1.1/account/verify_credentials.json";
+
+        options.SaveTokens = true;
+
+        options.Events = new OAuthEvents();
+
+    });
 
 var app = builder.Build();
 
