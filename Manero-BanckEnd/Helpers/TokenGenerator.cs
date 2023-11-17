@@ -5,15 +5,15 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Manero_BanckEnd
+namespace Manero_BanckEnd.Helpers
 {
     public class TokenGenerator
     {
-         
-            private readonly IConfiguration _configuration;
+
+        private readonly IConfiguration _configuration;
 
         public TokenGenerator(IConfiguration configuration)
-        { 
+        {
             _configuration = configuration;
         }
 
@@ -21,7 +21,7 @@ namespace Manero_BanckEnd
         public string Generate()
         {
 
-          
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]!));
             var signingKey = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
@@ -30,7 +30,7 @@ namespace Manero_BanckEnd
                 (
                     _configuration["Token:Issuer"],
                     _configuration["Token:Audience"],
-                    expires: DateTime.Now.AddMinutes(5),
+                    expires: DateTime.Now.AddMinutes(30),
                     signingCredentials: signingKey
                 );
 
@@ -38,29 +38,23 @@ namespace Manero_BanckEnd
             return token;
         }
 
-        public string Generate(Claim[] claims )
-        { 
-
-            //var claims = new Claim[]
-            //    {
-            //            new Claim(ClaimTypes.Email, user.Email),
-            //            new Claim(ClaimTypes.Name, user.Email),
-            //            new Claim("ApiKey", _configuration["ApiKeys:User"]!)
-            //    };
+        public string Generate(Claim[] claims , int expiresInMinutes = 15)
+        {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]!));
             var signingKey = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
             var securityToken = new JwtSecurityToken
-                (
-                    _configuration["Token:Issuer"],
-                    _configuration["Token:Audience"],
-                    claims,
-                    expires: DateTime.Now.AddMinutes(5),
-                    signingCredentials: signingKey
-                );
+            (
+                _configuration["Token:Issuer"],
+                _configuration["Token:Audience"],
+                claims,
+                expires: DateTime.Now.AddMinutes(expiresInMinutes),  
+                signingCredentials: signingKey
+            );
 
             var token = new JwtSecurityTokenHandler().WriteToken(securityToken);
             return token;
         }
     }
 }
+

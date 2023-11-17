@@ -76,4 +76,30 @@ public class ProductService
 
     }
 
+    public async Task<ServiceResponse> GetFeaturedProducts(string category)
+    {
+        try
+        {
+            // Get the products from the database that match the category and are featured
+            var featuredProducts = (await _productRepo.GetAsync()).Where(p => p.Category == category).ToList();
+
+
+            var response = new ServiceResponse
+            {
+                Status = ResponseStatusCode.OK,
+                Result = featuredProducts,
+                Message = "Featured products retrieved successfully",
+            };
+
+            return response;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return new ServiceResponse
+        {
+            Status = ResponseStatusCode.ERROR,
+            Message = "Something wrong geting featured products",
+            Result = null
+        };
+    }
+
 }

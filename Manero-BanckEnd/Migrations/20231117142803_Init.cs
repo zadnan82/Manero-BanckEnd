@@ -38,7 +38,9 @@ namespace Manero_BanckEnd.Migrations
                     Price = table.Column<decimal>(type: "money", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    ProductType = table.Column<int>(type: "int", nullable: false)
+                    ProductType = table.Column<int>(type: "int", nullable: false),
+                    IsFeatured = table.Column<bool>(type: "bit", nullable: false),
+                    ImageLink = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -215,12 +217,11 @@ namespace Manero_BanckEnd.Migrations
                 name: "Profiles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -256,6 +257,27 @@ namespace Manero_BanckEnd.Migrations
                         principalColumn: "ArticleNumber");
                     table.ForeignKey(
                         name: "FK_Reviews_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tokens",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsRevoked = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tokens_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -361,6 +383,11 @@ namespace Manero_BanckEnd.Migrations
                 name: "IX_Reviews_UserId",
                 table: "Reviews",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tokens_UserId",
+                table: "Tokens",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -386,6 +413,9 @@ namespace Manero_BanckEnd.Migrations
 
             migrationBuilder.DropTable(
                 name: "Reviews");
+
+            migrationBuilder.DropTable(
+                name: "Tokens");
 
             migrationBuilder.DropTable(
                 name: "Orders");

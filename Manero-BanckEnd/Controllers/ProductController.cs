@@ -2,6 +2,7 @@
 using Manero_BanckEnd.Helpers;
 using Manero_BanckEnd.Schemas;
 using Manero_BanckEnd.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -11,6 +12,7 @@ namespace Manero_BanckEnd.Controllers
     [Route("api/products")]
     [ApiController]
     [UseApiKey]
+    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly ProductService _productService; 
@@ -54,6 +56,20 @@ namespace Manero_BanckEnd.Controllers
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message); }
             return Problem();
+        }
+
+        [HttpGet("featured")]
+        public async Task<IActionResult> GetFeaturedProducts(string category)
+        {
+            try
+            {
+                var featuredProducts = await _productService.GetFeaturedProducts(category);
+                return Ok(featuredProducts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }
