@@ -13,7 +13,7 @@ public class DataContext : DbContext
     }
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
-        Database.Migrate();
+        //Database.Migrate();
     }
    
     public DbSet<AddressEntity> Addresses { get; set; }
@@ -28,5 +28,6 @@ public class DataContext : DbContext
     public DbSet<ReviewEntity> Reviews { get; set; }
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<KeyEntity> ApiKeys { get; set; }
+    public DbSet<TokenEntity> Tokens {  get; set; }
 
 }

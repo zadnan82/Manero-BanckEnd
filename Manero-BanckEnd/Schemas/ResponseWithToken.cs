@@ -2,7 +2,9 @@
 {
     public class ResponseWithToken
     {
-        public string Token { get; set; } = null!;
+        // public TokenReponse Token { get; set; } = null!;
+
+        public string  Token { get; set; } = null!;
         public object? Result { get; set; }
     }
 }
