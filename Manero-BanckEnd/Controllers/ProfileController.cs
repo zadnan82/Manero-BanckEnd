@@ -27,48 +27,82 @@ namespace Manero_BanckEnd.Controllers
         [HttpPost("Create")]
         public async Task<IActionResult> CreateProfile(ProfileCreateRequest request)
         {
-            var userEmail = User.FindFirstValue(ClaimTypes.Email);
-
-            var result = await _profileService.CreateProfile(userEmail, request);
-
-            return result.Status switch
+            try
             {
-                ResponseStatusCode.CREATED => Created("", result),
-                ResponseStatusCode.ERROR => Conflict(result.Message),
-                ResponseStatusCode.NOTFOUND => NotFound(result.Message),
-                _ => Problem(result.Message),
-            };
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                var userEmail = User.FindFirstValue(ClaimTypes.Email); 
+                var result = await _profileService.CreateProfile(userEmail, request);
+
+                return result.Status switch
+                {
+                    ResponseStatusCode.CREATED => Created("", result),
+                    ResponseStatusCode.ERROR => Conflict(result.Message),
+                    ResponseStatusCode.NOTFOUND => NotFound(result.Message),
+                    _ => Problem(result.Message),
+                }; 
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return Problem();
+            }
         }
+
 
         [HttpGet("Get")]
         public async Task<IActionResult> GetProfile()
         {
-            var userEmail = User.FindFirstValue(ClaimTypes.Email);
-
-            var result = await _profileService.GetProfile(userEmail);
-
-            return result.Status switch
+            try
             {
-                ResponseStatusCode.OK => Ok(result.Result),
-                ResponseStatusCode.NOTFOUND => NotFound(result.Message),
-                _ => Problem(result.Message),
-            };
+                
+                var userEmail = User.FindFirstValue(ClaimTypes.Email); 
+                var result = await _profileService.GetProfile(userEmail);
+
+                return result.Status switch
+                {
+                    ResponseStatusCode.OK => Ok(result.Result),
+                    ResponseStatusCode.NOTFOUND => NotFound(result.Message),
+                    _ => Problem(result.Message),
+                };
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return Problem();
+            }
         }
+
 
         [HttpPut("Update")]
         public async Task<IActionResult> UpdateProfile(ProfileUpdateRequest request)
         {
-            var userEmail = User.FindFirstValue(ClaimTypes.Email);
-
-            var result = await _profileService.UpdateProfile(userEmail, request);
-
-            return result.Status switch
+            try
             {
-                ResponseStatusCode.OK => Ok(result),
-                ResponseStatusCode.ERROR => Conflict(result.Message),
-                ResponseStatusCode.NOTFOUND => NotFound(result.Message),
-                _ => Problem(result.Message),
-            };
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                var userEmail = User.FindFirstValue(ClaimTypes.Email);
+
+                var result = await _profileService.UpdateProfile(userEmail, request);
+
+                return result.Status switch
+                {
+                    ResponseStatusCode.OK => Ok(result),
+                    ResponseStatusCode.ERROR => Conflict(result.Message),
+                    ResponseStatusCode.NOTFOUND => NotFound(result.Message),
+                    _ => Problem(result.Message),
+                };
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return Problem();
+            }
         }
     }
 }
+ 

@@ -13,21 +13,21 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Manero.Test;
+namespace Manero.Test.UserTests;
 
-public class UserTests
+public class UserEntityTests
 {
     //Arrange
-    private readonly UserCreateRequest  userCreateRequest =   new UserCreateRequest
-        {
-             FirstName = "Zainab",
-              LastName  = "Adnan",
-              Email = "zainab@hotmail.com",
-               Password = "Bytmig123!",
-        };
-     
+    private readonly UserCreateRequest userCreateRequest = new UserCreateRequest
+    {
+        FirstName = "Zainab",
+        LastName = "Adnan",
+        Email = "zainab@hotmail.com",
+        Password = "Bytmig123!",
+    };
 
-    [Fact]
+
+    [Fact]  //Zainab Test
     public void UserCreateRequest_Should_Convert_ToUserEntity()
     {
         //Act 
@@ -41,7 +41,7 @@ public class UserTests
         Assert.Equal(userCreateRequest.Email, userEntity.Email);
     }
 
-    [Fact]
+    [Fact]  //Zainab Test
     public void GenerateSecurePassword_Should_Return_PasswordAndSecurityKey()
     {
         //Arrange 
@@ -57,6 +57,6 @@ public class UserTests
         Assert.True(!string.IsNullOrEmpty(userEntity.Password.ToString()));
         Assert.NotEqual(password, userEntity.Password.ToString());
     }
-     
+
 
 }

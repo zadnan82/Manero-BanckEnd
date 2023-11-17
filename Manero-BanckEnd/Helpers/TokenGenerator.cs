@@ -38,7 +38,7 @@ namespace Manero_BanckEnd.Helpers
             return token;
         }
 
-        public string Generate(Claim[] claims)
+        public string Generate(Claim[] claims , int expiresInMinutes = 15)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]!));
             var signingKey = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
@@ -48,7 +48,7 @@ namespace Manero_BanckEnd.Helpers
                 _configuration["Token:Issuer"],
                 _configuration["Token:Audience"],
                 claims,
-                expires: DateTime.Now.AddMinutes(30), // Default expiration time is 30 minutes
+                expires: DateTime.Now.AddMinutes(expiresInMinutes),  
                 signingCredentials: signingKey
             );
 
