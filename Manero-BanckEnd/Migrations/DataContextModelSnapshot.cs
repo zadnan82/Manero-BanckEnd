@@ -389,7 +389,7 @@ namespace Manero_BanckEnd.Migrations
 
                     b.ToTable("Reviews");
                 });
- 
+
             modelBuilder.Entity("Manero_BanckEnd.Entities.SizeEntity", b =>
                 {
                     b.Property<int>("SizeId")
@@ -410,6 +410,7 @@ namespace Manero_BanckEnd.Migrations
                     b.HasIndex("ProductEntityArticleNumber");
 
                     b.ToTable("Size");
+                });
 
             modelBuilder.Entity("Manero_BanckEnd.Entities.TokenEntity", b =>
                 {
@@ -435,7 +436,6 @@ namespace Manero_BanckEnd.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Tokens");
- 
                 });
 
             modelBuilder.Entity("Manero_BanckEnd.Entities.UserEntity", b =>
@@ -607,7 +607,6 @@ namespace Manero_BanckEnd.Migrations
                     b.Navigation("User");
                 });
 
- 
             modelBuilder.Entity("Manero_BanckEnd.Entities.SizeEntity", b =>
                 {
                     b.HasOne("Manero_BanckEnd.Entities.ProductEntity", null)
@@ -615,12 +614,6 @@ namespace Manero_BanckEnd.Migrations
                         .HasForeignKey("ProductEntityArticleNumber");
                 });
 
-            modelBuilder.Entity("Manero_BanckEnd.Entities.ProductEntity", b =>
-                {
-                    b.Navigation("Color");
-
-                    b.Navigation("Size");
- 
             modelBuilder.Entity("Manero_BanckEnd.Entities.TokenEntity", b =>
                 {
                     b.HasOne("Manero_BanckEnd.Entities.UserEntity", "User")
@@ -630,7 +623,13 @@ namespace Manero_BanckEnd.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
- 
+                });
+
+            modelBuilder.Entity("Manero_BanckEnd.Entities.ProductEntity", b =>
+                {
+                    b.Navigation("Color");
+
+                    b.Navigation("Size");
                 });
 #pragma warning restore 612, 618
         }
