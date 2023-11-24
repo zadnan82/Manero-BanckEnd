@@ -4,6 +4,7 @@ using Manero_BanckEnd.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Manero_BanckEnd.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231121103020_Intial")]
+    partial class Intial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.14")
+                .HasAnnotation("ProductVersion", "7.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -389,7 +392,7 @@ namespace Manero_BanckEnd.Migrations
 
                     b.ToTable("Reviews");
                 });
- 
+
             modelBuilder.Entity("Manero_BanckEnd.Entities.SizeEntity", b =>
                 {
                     b.Property<int>("SizeId")
@@ -410,32 +413,6 @@ namespace Manero_BanckEnd.Migrations
                     b.HasIndex("ProductEntityArticleNumber");
 
                     b.ToTable("Size");
-
-            modelBuilder.Entity("Manero_BanckEnd.Entities.TokenEntity", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRevoked")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Tokens");
- 
                 });
 
             modelBuilder.Entity("Manero_BanckEnd.Entities.UserEntity", b =>
@@ -607,7 +584,6 @@ namespace Manero_BanckEnd.Migrations
                     b.Navigation("User");
                 });
 
- 
             modelBuilder.Entity("Manero_BanckEnd.Entities.SizeEntity", b =>
                 {
                     b.HasOne("Manero_BanckEnd.Entities.ProductEntity", null)
@@ -620,17 +596,6 @@ namespace Manero_BanckEnd.Migrations
                     b.Navigation("Color");
 
                     b.Navigation("Size");
- 
-            modelBuilder.Entity("Manero_BanckEnd.Entities.TokenEntity", b =>
-                {
-                    b.HasOne("Manero_BanckEnd.Entities.UserEntity", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
- 
                 });
 #pragma warning restore 612, 618
         }

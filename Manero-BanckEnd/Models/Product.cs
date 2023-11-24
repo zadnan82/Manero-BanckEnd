@@ -11,8 +11,8 @@ namespace Manero_BanckEnd.Models
 
         public string Category { get; set; } = null!;
         public string Name { get; set; } = null!;
-        public string Size { get; set; } = null!;
-        public string Color { get; set; } = null!;
+        public ICollection<SizeEntity> Size { get; set; } = new List<SizeEntity>();
+        public ICollection<ColorEntity> Color { get; set; } = new List<ColorEntity>();
 
         public decimal Price { get; set; }
         public string Description { get; set; } = null!;
