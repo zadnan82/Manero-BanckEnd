@@ -11,9 +11,9 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-   
+
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer(); 
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddTransient<TokenGenerator>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -71,7 +71,7 @@ builder.Services.AddAuthorization();
 
 
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
- 
+
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<ProfileService>();
 builder.Services.AddScoped<UserService>();
@@ -82,6 +82,8 @@ builder.Services.AddScoped<ApiKeyRepo>();
 builder.Services.AddScoped<UseApiKeyAttribute>();
 builder.Services.AddScoped<CardService>();
 builder.Services.AddScoped<CardRepo>();
+builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<TokenRepo>();
 builder.Services.AddTransient<DataInitializer>();
 builder.Services.AddScoped<DataInitializer>();
 
@@ -92,12 +94,14 @@ using (var scope = app.Services.CreateScope())
     scope.ServiceProvider.GetService<DataInitializer>().MigrateData();
 }
 
-app.UseCors(x=> x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+app.UseCors(x => x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers(); 
+app.MapControllers();
 app.Run();
+
+public partial class Program { }
