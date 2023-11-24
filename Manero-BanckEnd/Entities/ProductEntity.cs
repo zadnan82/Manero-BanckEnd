@@ -17,8 +17,8 @@ public class ProductEntity
     [Required]
     [Column(TypeName ="nvarchar(450)")]
     public string Name { get; set; } = null!;
-    public string Size { get; set; } = null!;
-    public string Color { get; set; } = null!;
+    public ICollection<SizeEntity> Size { get; set; } = new List<SizeEntity>();
+    public ICollection<ColorEntity> Color { get; set; } = new List<ColorEntity>();
 
     [Column(TypeName ="money")]
     public decimal Price { get; set; }

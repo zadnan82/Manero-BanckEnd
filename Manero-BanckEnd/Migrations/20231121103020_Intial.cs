@@ -33,8 +33,6 @@ namespace Manero_BanckEnd.Migrations
                     ArticleNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Size = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "money", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
@@ -76,6 +74,44 @@ namespace Manero_BanckEnd.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Color",
+                columns: table => new
+                {
+                    ColorId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductEntityArticleNumber = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Color", x => x.ColorId);
+                    table.ForeignKey(
+                        name: "FK_Color_Products_ProductEntityArticleNumber",
+                        column: x => x.ProductEntityArticleNumber,
+                        principalTable: "Products",
+                        principalColumn: "ArticleNumber");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Size",
+                columns: table => new
+                {
+                    SizeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Size = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductEntityArticleNumber = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Size", x => x.SizeId);
+                    table.ForeignKey(
+                        name: "FK_Size_Products_ProductEntityArticleNumber",
+                        column: x => x.ProductEntityArticleNumber,
+                        principalTable: "Products",
+                        principalColumn: "ArticleNumber");
                 });
 
             migrationBuilder.CreateTable(
@@ -314,6 +350,11 @@ namespace Manero_BanckEnd.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Color_ProductEntityArticleNumber",
+                table: "Color",
+                column: "ProductEntityArticleNumber");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Favorites_ProductArticleNumber",
                 table: "Favorites",
                 column: "ProductArticleNumber");
@@ -362,6 +403,11 @@ namespace Manero_BanckEnd.Migrations
                 name: "IX_Reviews_UserId",
                 table: "Reviews",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Size_ProductEntityArticleNumber",
+                table: "Size",
+                column: "ProductEntityArticleNumber");
         }
 
         /// <inheritdoc />
@@ -377,6 +423,9 @@ namespace Manero_BanckEnd.Migrations
                 name: "Cards");
 
             migrationBuilder.DropTable(
+                name: "Color");
+
+            migrationBuilder.DropTable(
                 name: "Favorites");
 
             migrationBuilder.DropTable(
@@ -387,6 +436,9 @@ namespace Manero_BanckEnd.Migrations
 
             migrationBuilder.DropTable(
                 name: "Reviews");
+
+            migrationBuilder.DropTable(
+                name: "Size");
 
             migrationBuilder.DropTable(
                 name: "Orders");

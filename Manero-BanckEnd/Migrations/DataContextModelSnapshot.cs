@@ -107,6 +107,28 @@ namespace Manero_BanckEnd.Migrations
                     b.ToTable("Cards");
                 });
 
+            modelBuilder.Entity("Manero_BanckEnd.Entities.ColorEntity", b =>
+                {
+                    b.Property<int>("ColorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ColorId"));
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductEntityArticleNumber")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ColorId");
+
+                    b.HasIndex("ProductEntityArticleNumber");
+
+                    b.ToTable("Color");
+                });
+
             modelBuilder.Entity("Manero_BanckEnd.Entities.FavoritesEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -253,10 +275,6 @@ namespace Manero_BanckEnd.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -280,10 +298,6 @@ namespace Manero_BanckEnd.Migrations
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
-
-                    b.Property<string>("Size")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ArticleNumber");
 
@@ -376,6 +390,28 @@ namespace Manero_BanckEnd.Migrations
                     b.ToTable("Reviews");
                 });
 
+            modelBuilder.Entity("Manero_BanckEnd.Entities.SizeEntity", b =>
+                {
+                    b.Property<int>("SizeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SizeId"));
+
+                    b.Property<string>("ProductEntityArticleNumber")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Size")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SizeId");
+
+                    b.HasIndex("ProductEntityArticleNumber");
+
+                    b.ToTable("Size");
+                });
+
             modelBuilder.Entity("Manero_BanckEnd.Entities.UserEntity", b =>
                 {
                     b.Property<string>("Id")
@@ -434,6 +470,13 @@ namespace Manero_BanckEnd.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Manero_BanckEnd.Entities.ColorEntity", b =>
+                {
+                    b.HasOne("Manero_BanckEnd.Entities.ProductEntity", null)
+                        .WithMany("Color")
+                        .HasForeignKey("ProductEntityArticleNumber");
                 });
 
             modelBuilder.Entity("Manero_BanckEnd.Entities.FavoritesEntity", b =>
@@ -536,6 +579,20 @@ namespace Manero_BanckEnd.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Manero_BanckEnd.Entities.SizeEntity", b =>
+                {
+                    b.HasOne("Manero_BanckEnd.Entities.ProductEntity", null)
+                        .WithMany("Size")
+                        .HasForeignKey("ProductEntityArticleNumber");
+                });
+
+            modelBuilder.Entity("Manero_BanckEnd.Entities.ProductEntity", b =>
+                {
+                    b.Navigation("Color");
+
+                    b.Navigation("Size");
                 });
 #pragma warning restore 612, 618
         }

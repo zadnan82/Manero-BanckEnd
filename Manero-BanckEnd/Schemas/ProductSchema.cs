@@ -9,8 +9,8 @@ namespace Manero_BanckEnd.Schemas
         public string ArticleNumber { get; set; } = null!;
          
         public string Name { get; set; } = null!;
-        public string Size { get; set; } = null!;
-        public string Color { get; set; } = null!;
+        public List<string> Size { get; set; } = new List<string>();
+        public List<string> Color { get; set; } = new List<string>();
 
         public decimal Price { get; set; }
         public string Description { get; set; } = null!;
