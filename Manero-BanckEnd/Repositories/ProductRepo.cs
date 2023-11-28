@@ -1,5 +1,6 @@
 ﻿using Manero_BanckEnd.Contexts;
 using Manero_BanckEnd.Entities;
+using Manero_BanckEnd.Schemas;
 using Microsoft.EntityFrameworkCore;
 
 namespace Manero_BanckEnd.Repositories;
@@ -19,4 +20,28 @@ public class ProductRepo : Repo<ProductEntity>
             .Include(p => p.Color)
             .ToListAsync();
     }
+    public async Task<ProductEntity> CreateProductsAsync(ProductCreateRequest request)
+    {
+        // Convert ProductCreateRequest to ProductEntity
+        var productEntity = new ProductEntity
+        {
+            ArticleNumber = request.ArticleNumber,
+            Name = request.Name,
+            Category = request.Category,
+            Size = request.Size.ToList(),
+            Color = request.Color.ToList(),
+            Price = request.Price,
+            Description = request.Description,
+            Quantity = request.Quantity,
+            ProductType = request.ProductType,
+            IsFeatured = request.IsFeatured,
+            ImageLink = request.ImageLink
+        };
+
+        await _context.Products.AddAsync(productEntity);
+        await _context.SaveChangesAsync();
+
+        return productEntity;
+    }
+
 }
