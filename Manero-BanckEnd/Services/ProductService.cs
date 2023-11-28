@@ -21,7 +21,7 @@ public class ProductService
         {
             if (!await _productRepo.ExistAsync(x => x.ArticleNumber == request.ArticleNumber))
             {
-                Product product = await _productRepo.CreateAsync(request);
+                Product product = await _productRepo.CreateProductsAsync(request);
                 if (product != null)
                 {
                     return new ServiceResponse
@@ -76,6 +76,28 @@ public class ProductService
 
     }
 
+    public async Task<ServiceResponse> TakeProductsAsync(int take, string category)
+    {
+        try
+        {
+            var takeProducts = (await _productRepo.GetAsync()).Where(p => p.Category == category).Take(take).ToList();
+
+            return new ServiceResponse
+            {
+                Status = ResponseStatusCode.OK,
+                Result = takeProducts.Take(take)
+            };
+
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return new ServiceResponse
+        {
+            Status = ResponseStatusCode.ERROR,
+            Message = "Someting went wrong",
+            Result = null
+        };
+
+    }
     public async Task<ServiceResponse> GetFeaturedProducts(string category)
     {
         try
