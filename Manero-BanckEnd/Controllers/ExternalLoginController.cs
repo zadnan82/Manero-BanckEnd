@@ -11,6 +11,7 @@
 //{
 //    [Route("api/[controller]")]
 //    [ApiController]
+//    [UseApiKey]
 //    public class ExternalLoginController : ControllerBase
 //    {
 //        private readonly UserManager<IdentityUser> _userManager;

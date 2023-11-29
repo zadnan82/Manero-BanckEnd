@@ -5,10 +5,12 @@ using Manero_BanckEnd.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Manero_BanckEnd.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,6 +88,10 @@ builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<TokenRepo>();
 builder.Services.AddTransient<DataInitializer>();
 builder.Services.AddScoped<DataInitializer>();
+builder.Services.AddScoped<AddressService>();
+builder.Services.AddScoped<AddressRepo>();
+builder.Services.AddScoped<AddressTypeRepo>();
+builder.Services.Configure<PhoneVerification>(builder.Configuration.GetSection("Twilio"));
 
 var app = builder.Build();
 
