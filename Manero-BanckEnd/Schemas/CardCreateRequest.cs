@@ -4,7 +4,6 @@ namespace Manero_BanckEnd.Schemas;
 
 public class CardCreateRequest
 {
-    public int Id { get; set; }
     public string CardHolderName { get; set; } = null!;
     public int CardNumber { get; set; }
     public int CVV { get; set; }
