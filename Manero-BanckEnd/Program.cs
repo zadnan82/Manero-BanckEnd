@@ -84,6 +84,8 @@ builder.Services.AddScoped<ApiKeyRepo>();
 builder.Services.AddScoped<UseApiKeyAttribute>();
 builder.Services.AddScoped<CardService>();
 builder.Services.AddScoped<CardRepo>();
+builder.Services.AddScoped<PromoCodeRepo>();
+builder.Services.AddScoped<PromoCodeService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<TokenRepo>();
 builder.Services.AddTransient<DataInitializer>();
