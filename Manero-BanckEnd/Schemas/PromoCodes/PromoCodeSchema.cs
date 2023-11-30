@@ -4,8 +4,6 @@ namespace Manero_BanckEnd.Schemas.PromoCodes;
 
 public class PromoCodeSchema
 {
-    public int Id { get; set; }
-
     public string PromoName { get; set; } = null!;
 
     public double SalePercentage { get; set; }
@@ -18,7 +16,7 @@ public class PromoCodeSchema
         if (promoCodeSchema != null)
             return new PromoCodeEntity
             {
-                Id = promoCodeSchema.Id,
+
                 PromoName = promoCodeSchema.PromoName,
                 SalePercentage = promoCodeSchema.SalePercentage,
                 Validity = promoCodeSchema.Validity,
