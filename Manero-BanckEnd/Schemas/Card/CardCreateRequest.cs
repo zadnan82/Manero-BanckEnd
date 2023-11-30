@@ -1,6 +1,6 @@
 ﻿using Manero_BanckEnd.Entities;
 
-namespace Manero_BanckEnd.Schemas;
+namespace Manero_BanckEnd.Schemas.Card;
 
 public class CardCreateRequest
 {

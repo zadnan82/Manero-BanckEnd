@@ -1,5 +1,5 @@
 ﻿using Manero_BanckEnd.Helpers;
-using Manero_BanckEnd.Schemas;
+using Manero_BanckEnd.Schemas.Card;
 using Manero_BanckEnd.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
