@@ -16,6 +16,12 @@ public class PromoCodeController : ControllerBase
         _promoCodeService = promoCodeService;
     }
 
+    [HttpPost("CREATE")]
+    public async Task<IActionResult> CreateAsync(PromoCodeSchema promoCodeSchema)
+    {
+        var promoCode = await _promoCodeService.CreateAsync(promoCodeSchema);
+        return StatusCode(201, promoCode);
+    }
 
     [HttpGet("GETALL")]
     public async Task<IActionResult> GetAllAsync()
@@ -29,12 +35,5 @@ public class PromoCodeController : ControllerBase
     {
         var promoCode = await _promoCodeService.DeleteAsync(id);
         return StatusCode(200, promoCode);
-    }
-
-    [HttpPost("CREATE")]
-    public async Task<IActionResult> CreateAsync(PromoCodeSchema promoCodeSchema)
-    {
-        var promoCode = await _promoCodeService.CreateAsync(promoCodeSchema);
-        return StatusCode(201, promoCode);
     }
 }
