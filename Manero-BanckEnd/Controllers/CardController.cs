@@ -22,7 +22,7 @@ public class CardController : ControllerBase
         _cardService = cardService;
     }
 
-    [HttpPost("Add")]
+    [HttpPost("CREATE")]
     public async Task<IActionResult> AddCreditCard([FromBody] CardCreateRequest request)
     {
         try
@@ -55,7 +55,68 @@ public class CardController : ControllerBase
         }
     }
 
-    [HttpDelete("delete")]
+    [HttpGet("GetAllUserCards")]
+    public async Task<IActionResult> GetAllAsync()
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid credit card information");
+            }
+
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return BadRequest("Unable to determine the user associated with this request");
+            }
+
+            var cards = await _cardService.GetAllAsync(userEmail);
+
+            return Ok(cards);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return Problem();
+        }
+    }
+
+    [HttpPut("EditCard")]
+    public async Task<IActionResult> PutAsync(CardUpdateRequest request)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid credit card information");
+            }
+
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return BadRequest("Unable to determine the user associated with this request");
+            }
+
+
+            var result = await _cardService.PutAsync(request, userEmail);
+
+            return result.Status switch
+            {
+                ResponseStatusCode.OK => Created("Card has been Changed!", result.Result),
+                ResponseStatusCode.EXIST => Conflict(result.Message),
+                _ => Problem(result.Message),
+            };
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return Problem();
+        }
+
+    }
+
+    [HttpDelete("DELETE")]
     public async Task<IActionResult> DeleteCardAsync(CardDeleteRequest request)
     {
         try
