@@ -1,4 +1,4 @@
-﻿namespace Manero_BanckEnd.Schemas;
+﻿namespace Manero_BanckEnd.Schemas.Card;
 
 public class CardDeleteRequest
 {
