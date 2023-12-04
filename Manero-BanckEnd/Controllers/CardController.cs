@@ -1,5 +1,5 @@
 ﻿using Manero_BanckEnd.Helpers;
-using Manero_BanckEnd.Schemas;
+using Manero_BanckEnd.Schemas.Card;
 using Manero_BanckEnd.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -22,7 +22,7 @@ public class CardController : ControllerBase
         _cardService = cardService;
     }
 
-    [HttpPost("Add")]
+    [HttpPost("CREATE")]
     public async Task<IActionResult> AddCreditCard([FromBody] CardCreateRequest request)
     {
         try
@@ -55,8 +55,8 @@ public class CardController : ControllerBase
         }
     }
 
-    [HttpDelete("delete")]
-    public async Task<IActionResult> DeleteCardAsync(CardDeleteRequest request)
+    [HttpGet("GetAllUserCards")]
+    public async Task<IActionResult> GetAllAsync()
     {
         try
         {
@@ -71,15 +71,9 @@ public class CardController : ControllerBase
                 return BadRequest("Unable to determine the user associated with this request");
             }
 
+            var cards = await _cardService.GetAllAsync(userEmail);
 
-            var result = await _cardService.DeleteAsync(request, userEmail);
-
-            return result.Status switch
-            {
-                ResponseStatusCode.OK => Created("Card has been removed", result.Result),
-                ResponseStatusCode.EXIST => Conflict(result.Message),
-                _ => Problem(result.Message),
-            };
+            return Ok(cards);
         }
         catch (Exception ex)
         {
@@ -120,5 +114,38 @@ public class CardController : ControllerBase
             return Problem();
         }
 
+    }
+
+    [HttpDelete("DELETE")]
+    public async Task<IActionResult> DeleteCardAsync(CardDeleteRequest request)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid credit card information");
+            }
+
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return BadRequest("Unable to determine the user associated with this request");
+            }
+
+
+            var result = await _cardService.DeleteAsync(request, userEmail);
+
+            return result.Status switch
+            {
+                ResponseStatusCode.OK => Created("Card has been removed", result.Result),
+                ResponseStatusCode.EXIST => Conflict(result.Message),
+                _ => Problem(result.Message),
+            };
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return Problem();
+        }
     }
 }

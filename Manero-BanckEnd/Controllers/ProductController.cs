@@ -71,5 +71,16 @@ namespace Manero_BanckEnd.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpGet("take")]
+        public async Task<IActionResult> GetAll(int take, string category)
+        {
+            try
+            {
+                var result = await _productService.TakeProductsAsync(take, category);
+                return Ok(result.Result);
+            }
+            catch (Exception ex) { Debug.WriteLine(ex.Message); }
+            return Problem();
+        }
     }
 }

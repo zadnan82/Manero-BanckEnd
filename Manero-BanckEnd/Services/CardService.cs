@@ -30,14 +30,13 @@ public class CardService
         catch (Exception ex) { return new ServiceResponse { Status = ResponseStatusCode.ERROR }; }
     }
 
-    public async Task<ServiceResponse> GetAllAsync(string userEmail)
+    public async Task<List<CardModel>> GetAllAsync(string userEmail)
     {
-
         var userId = await _cardRepo.GetUserIdByEmailAsync(userEmail);
-
         var cardDetails = await _cardRepo.GetUserByCardDetailsAsync(userId);
-        var cardDetailModel = cardDetails.Select(x => (CardModel)x).ToList();
-        return new ServiceResponse { Status = ResponseStatusCode.OK };
+        var cardDetailModels = cardDetails.Select(x => (CardModel)x).ToList();
+
+        return cardDetailModels;
     }
 
     public async Task<ServiceResponse> DeleteAsync(int cardId, string userEmail)

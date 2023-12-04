@@ -28,6 +28,11 @@ public class DataContext : DbContext
     public DbSet<ReviewEntity> Reviews { get; set; }
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<KeyEntity> ApiKeys { get; set; }
+ 
+    public DbSet<SizeEntity> Size { get; set; }
+    public DbSet<ColorEntity> Color{ get; set; }
+ 
     public DbSet<TokenEntity> Tokens {  get; set; }
+
 
 }
