@@ -80,6 +80,7 @@ namespace Manero_BanckEnd.Services
             }
         }
 
+    
         public async Task<ServiceResponse> GetProfile(string userEmail)
         {
             try
