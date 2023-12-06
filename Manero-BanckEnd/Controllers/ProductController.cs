@@ -12,7 +12,7 @@ namespace Manero_BanckEnd.Controllers
     [Route("api/products")]
     [ApiController]
     [UseApiKey]
-    [Authorize]
+    [Authorize(Policy = "JwtPolicy")]
     public class ProductController : ControllerBase
     {
         private readonly ProductService _productService; 

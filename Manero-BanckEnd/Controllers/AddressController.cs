@@ -5,25 +5,29 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
+using Manero_BanckEnd.Contexts;
+using Manero_BanckEnd.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Manero_BanckEnd.Controllers
 {
     [Route("api/Address")]
     [ApiController]
-    [UseApiKey]
-    [Authorize]
+    [Authorize(Policy = "JwtPolicy")]
     public class AddressController : ControllerBase
     {
         private readonly AddressService _addressService;
+        private readonly DataContext _dbContext;
 
-        public AddressController(AddressService addressService)
+        public AddressController(AddressService addressService, DataContext dbContext)
         {
             
             _addressService = addressService;
+            _dbContext = dbContext;
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> CreateProfile(AddressCreateRequest request)
+        public async Task<IActionResult> CreateAddress(AddressCreateRequest request)
         {
             try
             {
@@ -31,9 +35,9 @@ namespace Manero_BanckEnd.Controllers
                 {
                     return BadRequest();
                 }
+
                 var userEmail = User.FindFirstValue(ClaimTypes.Email);
-                var streetName = User.FindFirstValue(ClaimTypes.StreetAddress);
-                var result = await _addressService.CreateAddress(userEmail, streetName, request);
+                var result = await _addressService.CreateNewAddress(userEmail, request);
 
                 return result.Status switch
                 {
@@ -52,12 +56,11 @@ namespace Manero_BanckEnd.Controllers
 
 
         [HttpGet("Get")]
-        public async Task<IActionResult> GetAddress()
+        public async Task<IActionResult> GetAddress(string streetName)
         {
             try
             {
-
-                var streetName = User.FindFirstValue(ClaimTypes.StreetAddress);
+                
                 var result = await _addressService.GetAddress(streetName);
 
                 return result.Status switch
@@ -76,7 +79,7 @@ namespace Manero_BanckEnd.Controllers
 
 
         [HttpPut("Update")]
-        public async Task<IActionResult> UpdateProfile(AddressUpdateRequest request)
+        public async Task<IActionResult> UpdateAddress(string title, AddressUpdateRequest request)
         {
             try
             {
@@ -84,13 +87,17 @@ namespace Manero_BanckEnd.Controllers
                 {
                     return BadRequest();
                 }
-                var userEmail = User.FindFirstValue(ClaimTypes.Email);
 
-                var result = await _addressService.UpdateAddress(userEmail, request);
+                
+                var currentAddressTitle = await _dbContext.AddressTypes.FirstOrDefaultAsync(a => a.Title == title);
+                var currentAddress =
+                    await _dbContext.Addresses.FirstOrDefaultAsync(s => s.Id == currentAddressTitle.AddressId);
+
+                var result = await _addressService.UpdateAddress(currentAddress.StreetName, currentAddressTitle.Title, request);
 
                 return result.Status switch
                 {
-                    ResponseStatusCode.OK => Ok(result),
+                    ResponseStatusCode.OK => Ok(result.Result),
                     ResponseStatusCode.ERROR => Conflict(result.Message),
                     ResponseStatusCode.NOTFOUND => NotFound(result.Message),
                     _ => Problem(result.Message),
