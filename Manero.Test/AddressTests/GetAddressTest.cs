@@ -42,7 +42,7 @@ namespace Manero.Test.ManagemenTests
             var addressRepo = new AddressRepo(context);
             var addressTypeRepo = new AddressTypeRepo(context);
 
-            var addressService = new AddressService(context, profileRepo, userRepo, addressRepo, addressTypeRepo);
+            var addressService = new AddressService(context, addressRepo);
 
             var streetNameToFetch = "Krukmakargatan 68";
 

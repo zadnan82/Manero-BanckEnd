@@ -14,7 +14,7 @@ namespace Manero_BanckEnd.Controllers
     [Route("api/Profile")]
     [ApiController]
     [UseApiKey]
-    [Authorize]
+    [Authorize(Policy = "JwtPolicy")]
     public class ProfileController : ControllerBase
     {
         private readonly ProfileService _profileService;

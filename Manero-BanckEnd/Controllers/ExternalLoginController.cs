@@ -7,12 +7,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Manero_BanckEnd.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Manero_BanckEnd.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [UseApiKey]
+    [Authorize(Policy = "ExternalLoginPolicy")]
     public class ExternalLoginController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;

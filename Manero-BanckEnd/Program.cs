@@ -24,9 +24,11 @@ builder.Services.AddTransient<TokenGenerator>();
 
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-    .AddCookie()
+    
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -131,7 +133,26 @@ builder.Services.AddSwaggerGen(swagger =>
     });
 });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("JwtPolicy", policy =>
+    {
+        policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
+        policy.RequireAuthenticatedUser();
+    });
+});
+
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ExternalLoginPolicy", policy =>
+    {
+        policy.AuthenticationSchemes.Add("Google");
+        policy.AuthenticationSchemes.Add("Facebook");
+        policy.AuthenticationSchemes.Add("Twitter");
+        policy.RequireAuthenticatedUser();
+    });
+});
 
 
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
