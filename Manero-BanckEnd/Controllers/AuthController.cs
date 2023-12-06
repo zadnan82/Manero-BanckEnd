@@ -34,7 +34,6 @@ public class AuthController : ControllerBase
             if (!ModelState.IsValid)
                 return BadRequest("Fill in Email and Password");
             
-
             var result = await _userService.LoginUserAsync(user);
 
           // var userId = ((UserLoginResult)result.Result!).User.Id;
@@ -45,10 +44,6 @@ public class AuthController : ControllerBase
                 new Claim(ClaimTypes.Name, user.Email),
                 new Claim("ApiKey", _configuration["ApiKey"]!)
                 };
-              
-                  
-            
-
 
             //var toekResponse = await _tokenService.GenerateTokenAsync(claims);
             //if (toekResponse == null)

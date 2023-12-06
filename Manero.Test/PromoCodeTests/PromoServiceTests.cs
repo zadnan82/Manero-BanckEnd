@@ -11,7 +11,7 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Manero.Test.PromoTests
+namespace Manero.Test.PromoCodeTests
 {
     public class PromoServiceTest
     {
@@ -113,7 +113,7 @@ namespace Manero.Test.PromoTests
             var result = await promoCodeService.DeleteAsync(1);
 
             // Assert  
-            Assert.Null(result); 
+            Assert.Null(result);
         }
 
 
