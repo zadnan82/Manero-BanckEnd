@@ -118,6 +118,41 @@ namespace Manero_BanckEnd.Services
             }
         }
 
+        public async Task<ServiceResponse> GetAllAddresses(string userEmail)
+        {
+            try
+            {
+                var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
+
+                if (user == null)
+                {
+                    return new ServiceResponse { Status = ResponseStatusCode.NOTFOUND, Message = "User not found" };
+                }
+
+                var addresses = _dbContext.AddressTypes
+                    .Where(a => a.UserId == user.Id)
+                    .Select(a => a.Address)
+                    .ToList();
+
+                if (addresses == null || !addresses.Any())
+                {
+                    return new ServiceResponse { Status = ResponseStatusCode.NOTFOUND, Message = "Addresses not found" };
+                }
+
+                foreach (var address in addresses)
+                {
+                    Console.WriteLine($"Address: {address.StreetName}, {address.Zipcode}, {address.City}");
+                }
+
+                return new ServiceResponse { Status = ResponseStatusCode.OK, Result = addresses };
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error getting addresses: {ex}");
+                return new ServiceResponse { Status = ResponseStatusCode.ERROR, Message = "Error getting addresses" };
+            }
+        }
+
         public async Task<ServiceResponse> UpdateAddress(string streetName, string title, AddressUpdateRequest request)
         {
             try

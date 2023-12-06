@@ -77,6 +77,28 @@ namespace Manero_BanckEnd.Controllers
             }
         }
 
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAllAddresses()
+        {
+            try
+            {
+                var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+                var result = await _addressService.GetAllAddresses(userEmail);
+
+                return result.Status switch
+                {
+                    ResponseStatusCode.OK => Ok(result.Result),
+                    ResponseStatusCode.NOTFOUND => NotFound(result.Message),
+                    _ => Problem(result.Message),
+                };
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return Problem();
+            }
+        }
+
 
         [HttpPut("Update")]
         public async Task<IActionResult> UpdateAddress(string title, AddressUpdateRequest request)
@@ -97,7 +119,7 @@ namespace Manero_BanckEnd.Controllers
 
                 return result.Status switch
                 {
-                    ResponseStatusCode.OK => Ok(result.Result),
+                    ResponseStatusCode.OK => Ok(result.Message),
                     ResponseStatusCode.ERROR => Conflict(result.Message),
                     ResponseStatusCode.NOTFOUND => NotFound(result.Message),
                     _ => Problem(result.Message),
