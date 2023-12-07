@@ -43,5 +43,12 @@ public class ProductRepo : Repo<ProductEntity>
 
         return productEntity;
     }
+    public async Task<ProductEntity> GetByArticleNumberAsync(string articleNumber)
+    {
+        return await _context.Products
+            .Include(p => p.Size)
+            .Include(p => p.Color)
+            .FirstOrDefaultAsync(p => p.ArticleNumber == articleNumber);
+    }
 
 }

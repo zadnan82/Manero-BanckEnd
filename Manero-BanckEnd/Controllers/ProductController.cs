@@ -82,5 +82,27 @@ namespace Manero_BanckEnd.Controllers
             catch (Exception ex) { Debug.WriteLine(ex.Message); }
             return Problem();
         }
+
+        [HttpGet("article/{articleNumber}")]
+        public async Task<IActionResult> GetByArticleNumber(string articleNumber)
+        {
+            try
+            {
+                var product = await _productService.GetByArticleNumberAsync(articleNumber);
+
+                if (product != null)
+                {
+                    return Ok(product);
+                }
+                else
+                {
+                    return NotFound($"Product with article number '{articleNumber}' not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

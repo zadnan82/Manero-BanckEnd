@@ -124,4 +124,42 @@ public class ProductService
         };
     }
 
+    public async Task<ServiceResponse> GetByArticleNumberAsync(string articleNumber)
+    {
+        try
+        {
+            var product = await _productRepo.GetByArticleNumberAsync(articleNumber);
+
+            if (product != null)
+            {
+                return new ServiceResponse
+                {
+                    Status = ResponseStatusCode.OK,
+                    Result = product,
+                    Message = "Product retrieved successfully"
+                };
+            }
+            else
+            {
+                return new ServiceResponse
+                {
+                    Status = ResponseStatusCode.NOTFOUND,
+                    Message = $"Product with article number '{articleNumber}' not found",
+                    Result = null
+                };
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
+
+        return new ServiceResponse
+        {
+            Status = ResponseStatusCode.ERROR,
+            Message = "Something went wrong getting the product",
+            Result = null
+        };
+    }
+
 }
