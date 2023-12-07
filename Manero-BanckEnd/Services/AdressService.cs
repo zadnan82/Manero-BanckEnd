@@ -107,9 +107,14 @@ namespace Manero_BanckEnd.Services
                     return new ServiceResponse { Status = ResponseStatusCode.NOTFOUND, Message = "Address not found" };
                 }
 
-                
+                var addressType = await _dbContext.AddressTypes.FirstOrDefaultAsync(a => a.AddressId == addressEntity.Id);
 
-                return new ServiceResponse { Status = ResponseStatusCode.OK, Result = addressEntity };
+                if (addressType == null)
+                {
+                    return new ServiceResponse { Status = ResponseStatusCode.NOTFOUND, Message = "Address type not found" };
+                }
+
+                return new ServiceResponse { Status = ResponseStatusCode.OK, Result = new { Address = addressEntity, Title = addressType.Title } };
             }
             catch (Exception ex)
             {
@@ -131,7 +136,7 @@ namespace Manero_BanckEnd.Services
 
                 var addresses = _dbContext.AddressTypes
                     .Where(a => a.UserId == user.Id)
-                    .Select(a => a.Address)
+                    .Select(a => new { Address = a.Address, Title = a.Title })
                     .ToList();
 
                 if (addresses == null || !addresses.Any())
@@ -141,7 +146,7 @@ namespace Manero_BanckEnd.Services
 
                 foreach (var address in addresses)
                 {
-                    Console.WriteLine($"Address: {address.StreetName}, {address.Zipcode}, {address.City}");
+                    Console.WriteLine($"Address: {address.Address.StreetName}, {address.Address.Zipcode}, {address.Address.City}, Title: {address.Title}");
                 }
 
                 return new ServiceResponse { Status = ResponseStatusCode.OK, Result = addresses };
