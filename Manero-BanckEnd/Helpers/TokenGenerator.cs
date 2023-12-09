@@ -30,7 +30,7 @@ namespace Manero_BanckEnd.Helpers
                 (
                     _configuration["Token:Issuer"],
                     _configuration["Token:Audience"],
-                    expires: DateTime.Now.AddMinutes(30),
+                    expires: DateTime.Now.AddHours(12),
                     signingCredentials: signingKey
                 );
 

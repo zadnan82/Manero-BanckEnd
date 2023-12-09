@@ -11,7 +11,7 @@ namespace Manero_BanckEnd.Controllers;
 
 [Route("api/Card")]
 [ApiController]
-[Authorize]
+[Authorize(Policy = "JwtPolicy")]
 [UseApiKey]
 public class CardController : ControllerBase
 {

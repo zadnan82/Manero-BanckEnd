@@ -10,8 +10,7 @@ namespace Manero_BanckEnd.Controllers
 {
     [Route("api/PhoneVerification")]
     [ApiController]
-    [UseApiKey]
-    [Authorize]
+    [Authorize(Policy = "JwtPolicy")]
     public class PhoneVerificationController : ControllerBase
     {
         private readonly PhoneVerification _twilioSettings;
