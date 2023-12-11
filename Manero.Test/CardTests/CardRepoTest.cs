@@ -44,9 +44,48 @@ namespace Manero.Test.CardTests
                 Assert.Equal(userId, result.UserId);
             }
         }
+        [Fact]//Victor Grimschold
+        public async Task DeleteAsync_Removes_CardEntity()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<DataContext>()
+                .UseInMemoryDatabase(databaseName: "Test_DeleteCard")
+                .Options;
 
+            var cardIdToDelete = 1;
+            var userId = "user123";
 
+            // Skapa och fylla databasen med testdata
+            using (var context = new DataContext(options))
+            {
+                context.Cards.Add(new CardEntity { Id = cardIdToDelete, UserId = userId, CardHolderName = "test" });
+                context.Cards.Add(new CardEntity { Id = 2, UserId = userId, CardHolderName = "test2" });
+                await context.SaveChangesAsync();
+            }
+
+            // Act och Assert
+            using (var context = new DataContext(options))
+            {
+                var repo = new CardRepo(context);
+
+                // Hitta kortet som ska tas bort
+                var cardToDelete = await context.Cards.FindAsync(cardIdToDelete);
+
+                // Kontrollera att kortet faktiskt finns och ta sedan bort det
+                if (cardToDelete != null)
+                {
+                    await repo.DeleteAsync(cardToDelete);
+                }
+
+                var deletedCard = await context.Cards.FindAsync(cardIdToDelete);
+                Assert.Null(deletedCard);
+            }
+        }
 
     }
 
+
+
 }
+
+
