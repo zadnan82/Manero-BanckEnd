@@ -6,16 +6,21 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Manero_BanckEnd.Entities;
+using Manero_BanckEnd.Schemas;
+using Microsoft.Extensions.Configuration;
 
 namespace Manero.Test.ManagemenTests
 {
     public class GetAddressTest
     {
-        [Fact] //FredrikSpanien Test
-        public async Task GetAddress_When_AddressExists_Returns_OkWithAddress()
+        
+
+        [Fact] //FredrikSpanienTest
+        public async Task GetAddress_When_AddressDoesNotExist_Returns_NotFound()
         {
             // Arrange
             var dbContextOptions = new DbContextOptionsBuilder<DataContext>()
@@ -23,38 +28,18 @@ namespace Manero.Test.ManagemenTests
                 .Options;
 
             using var context = new DataContext(dbContextOptions);
-
-            
-            var addressEntity = new AddressEntity
-            {
-                StreetName = "Krukmakargatan 68",
-                City = "Kattmeow",
-                Zipcode = "52115",
-                
-            };
-
-            
-            await context.Addresses.AddAsync(addressEntity);
-            await context.SaveChangesAsync();
-
-            var profileRepo = new ProfileRepo(context);
-            var userRepo = new UserRepo(context);
             var addressRepo = new AddressRepo(context);
-            var addressTypeRepo = new AddressTypeRepo(context);
-
             var addressService = new AddressService(context, addressRepo);
 
-            var streetNameToFetch = "Krukmakargatan 68";
-
             // Act
-            var result = await addressService.GetAddress(streetNameToFetch);
+            var result = await addressService.GetAddress("NonExistentStreet");
 
             // Assert
-            Assert.Equal(ResponseStatusCode.OK, result.Status);
-            Assert.NotNull(result.Result);
-            Assert.Equal(addressEntity.StreetName, (result.Result as AddressEntity)?.StreetName);
-            Assert.Equal(addressEntity.Zipcode, (result.Result as AddressEntity)?.Zipcode);
-            Assert.Equal(addressEntity.City, (result.Result as AddressEntity)?.City);
+            Assert.Equal(ResponseStatusCode.NOTFOUND, result.Status);
+            Assert.Equal("Address not found", result.Message);
+            Assert.Null(result.Result);
         }
+
+        
     }
 }
